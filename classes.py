@@ -1,4 +1,7 @@
 import pygame
+from variables import screen_width, screen, screen_height, sky_surface, ground_floor, ground_rect, ground_surface, clock
+
+### classes used throughout program
 
 class Bird(pygame.sprite.Sprite):
     def __init__(self):
@@ -25,3 +28,18 @@ class Bird(pygame.sprite.Sprite):
     def update(self):
         self.player_input()
         self.apply_gravity()
+
+
+class Pipe(pygame.sprite.Sprite):
+    def __init__(self) -> None:
+        super().__init__()
+        self.top = pygame.image.load('graphics/pipe/pipe.png').convert_alpha()
+        self.top_rect = self.top.get_rect(midtop = (screen_width//2, 600))
+        self.bottom = pygame.image.load('graphics/pipe/pipe.png').convert_alpha()
+        self.bottom = pygame.transform.rotozoom(self.bottom, 180, 1)
+        self.bottom_rect = self.bottom.get_rect(midbottom = (screen_width//2, 400))
+
+    def update(self):
+        #move the pipe to the left
+        self.top_rect.x-=1.5
+        self.bottom_rect.x-=1.5
