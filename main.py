@@ -7,6 +7,7 @@ from variables import screen_width, screen, screen_height, sky_surface, ground_f
 # pygame setup
 pygame.init()
 pygame.display.set_caption('Flappy')
+game_active = True
 
 
 
@@ -14,8 +15,13 @@ pygame.display.set_caption('Flappy')
 # class and sprite group creation
 bird = pygame.sprite.GroupSingle()
 bird.add(Bird())
-pipe = pygame.sprite.GroupSingle()
+pipe_group = pygame.sprite.Group()
 pipe = Pipe()
+
+# Timer for pipes
+pipe_timer = pygame.USEREVENT + 1
+pygame.time.set_timer(pipe_timer,3000)
+
 
 
 # main loop
@@ -24,6 +30,11 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
+        if game_active:
+            if event.type == pipe_timer:
+                pipe_group.add(Pipe())
+
     screen.blit(sky_surface,(0,0))
     screen.blit(ground_surface, ground_rect)
     ground_rect.x-=1.5
@@ -32,8 +43,7 @@ while True:
 
     bird.draw(screen)
     bird.update()
-    screen.blit(pipe.top, pipe.top_rect)
-    screen.blit(pipe.bottom, pipe.bottom_rect)
-    pipe.update()
+    pipe_group.draw(screen)
+    pipe_group.update()
     pygame.display.update()
     clock.tick(60)
