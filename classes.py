@@ -1,6 +1,5 @@
 import pygame
-from variables import screen_width, screen, screen_height, sky_surface, ground_floor, ground_rect, ground_surface, clock
-from random import randint
+from variables import screen_width, screen, screen_height, sky_surface, ground_floor, ground_rect, ground_surface, clock, speed
 ### classes used throughout program
 
 class Bird(pygame.sprite.Sprite):
@@ -30,19 +29,38 @@ class Bird(pygame.sprite.Sprite):
         self.apply_gravity()
 
 
-class Pipe(pygame.sprite.Sprite):
-    def __init__(self) -> None:
+class Pipe_bottom(pygame.sprite.Sprite):
+    def __init__(self, height) -> None:
         super().__init__()
-        bottom_height = randint(200,540)
-        gap = 150
         self.bottom = pygame.image.load('graphics/pipe/pipe.png').convert_alpha()
-        self.bottom = pygame.transform.rotozoom(self.bottom, 0, .5)
-        self.bottom_rect = self.bottom.get_rect(midtop = (screen_width, bottom_height))
-        self.top = pygame.image.load('graphics/pipe/pipe.png').convert_alpha()
-        self.top = pygame.transform.rotozoom(self.top, 180, .5)
-        self.top_rect = self.bottom.get_rect(midbottom = (screen_width, bottom_height-gap))
+        self.bottom = pygame.transform.rotozoom(self.bottom, 0, .4)
+
+        self.image = self.bottom
+        self.rect = self.image.get_rect(midtop = (screen_width, height))
+    
+    def destroy(self):
+        if self.rect.x <= -100: 
+            self.kill()#destroys the Obstacle sprite
 
     def update(self):
         #move the pipe to the left
-        self.top_rect.x-=1.5
-        self.bottom_rect.x-=1.5
+        self.rect.x-=speed
+        self.destroy()
+
+class Pipe_top(pygame.sprite.Sprite):
+    def __init__(self, height) -> None:
+        super().__init__()
+        self.top = pygame.image.load('graphics/pipe/pipe.png').convert_alpha()
+        self.top = pygame.transform.rotozoom(self.top, 180, .4)
+
+        self.image = self.top
+        self.rect = self.image.get_rect(midbottom = (screen_width, height-150))
+    
+    def destroy(self):
+        if self.rect.x <= -100: 
+            self.kill()#destroys the Obstacle sprite
+
+    def update(self):
+        #move the pipe to the left
+        self.rect.x-=speed
+        self.destroy()
