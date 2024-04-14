@@ -2,9 +2,11 @@ import pygame
 
 ### basic variables used throughout program
 
+
 screen_width = 600
 screen_height = 700
 ground_floor = 500
+speed = 2
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((screen_width, screen_height))
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
